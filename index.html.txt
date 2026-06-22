@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>个人主页 | Portfolio</title>
+  <style>
+    /* 全局重置 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Microsoft YaHei", sans-serif;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      background-color: #f8f9fa;
+      color: #2d3748;
+      line-height: 1.6;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    ul {
+      list-style: none;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .section-title {
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 60px;
+      position: relative;
+    }
+    .section-title::after {
+      content: "";
+      width: 60px;
+      height: 3px;
+      background: #3182ce;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: -10px;
+    }
+
+    /* 导航栏 */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: #fff;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      z-index: 999;
+    }
+    .nav-wrap {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 70px;
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #3182ce;
+    }
+    .nav-list {
+      display: flex;
+      gap: 35px;
+    }
+    .nav-list a {
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    .nav-list a:hover {
+      color: #3182ce;
+    }
+    .menu-btn {
+      display: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+    }
+
+    /* 首页横幅 */
+    .hero {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      text-align: center;
+      background: linear-gradient(135deg, #edf2f7 0%, #e2e8f0 100%);
+      padding-top: 70px;
+    }
+    .hero-content h1 {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+    .hero-content p {
+      font-size: 1.2rem;
+      color: #4a5568;
+      margin-bottom: 30px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 12px 32px;
+      background: #3182ce;
+      color: #fff;
+      border-radius: 50px;
+      transition: all 0.3s;
+    }
+    .btn:hover {
+      background: #2b6cb0;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 16px rgba(49, 130, 206, 0.25);
+    }
+
+    /* 通用区块 */
+    section {
+      padding: 100px 0;
+    }
+    .bg-white {
+      background: #fff;
+    }
+
+    /* 关于我 */
+    .about-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 50px;
+      align-items: center;
+    }
+    .avatar-box {
+      text-align: center;
+    }
+    .avatar {
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 6px solid #fff;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+    .about-text h3 {
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+    }
+    .about-text p {
+      margin-bottom: 15px;
+      color: #4a5568;
+      font-size: 1.05rem;
+    }
+
+    /* 技能板块 */
+    .skill-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+    }
+    .skill-card {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .skill-card h4 {
+      margin-bottom: 15px;
+      font-size: 1.2rem;
+    }
+    .progress-wrap {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: #3182ce;
+      width: 0;
+      transition: width 1s ease-out;
+    }
+    .skill-percent {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      color: #718096;
+    }
+
+    /* 项目作品 */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+    }
+    .project-card {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: transform 0.3s;
+    }
+    .project-card:hover {
+      transform: translateY(-8px);
+    }
+    .project-img {
+      width: 100%;
+      height: 200px;
+      background: #cbd5e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      font-size: 3rem;
+    }
+    .project-info {
+      padding: 25px;
+    }
+    .project-info h4 {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
+    .project-info p {
+      color: #4a5568;
+      margin-bottom: 15px;
+    }
+    .project-tag {
+      display: inline-block;
+      padding: 4px 10px;
+      background: #e6f0ff;
+      color: #3182ce;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      margin-right: 6px;
+    }
+
+    /* 联系板块 */
+    .contact-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 50px;
+    }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    .contact-icon {
+      width: 48px;
+      height: 48px;
+      background: #3182ce;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 20px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+      transition: border 0.3s;
+    }
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: #3182ce;
+    }
+    .contact-form textarea {
+      min-height: 140px;
+      resize: vertical;
+    }
+
+    /* 页脚 */
+    footer {
+      background: #2d3748;
+      color: #fff;
+      text-align: center;
+      padding: 30px 0;
+    }
+
+    /* 移动端适配 */
+    @media (max-width: 768px) {
+      .nav-list {
+        position: fixed;
+        top: 70px;
+        left: -100%;
+        flex-direction: column;
+        background: #fff;
+        width: 100%;
+        height: calc(100vh - 70px);
+        justify-content: center;
+        align-items: center;
+        transition: left 0.3s;
+      }
+      .nav-list.active {
+        left: 0;
+      }
+      .menu-btn {
+        display: block;
+      }
+      .hero-content h1 {
+        font-size: 2rem;
+      }
+      .about-wrap,
+      .contact-wrap {
+        grid-template-columns: 1fr;
+      }
+      .avatar {
+        width: 220px;
+        height: 220px;
+      }
+      section {
+        padding: 70px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 导航栏 -->
+  <header>
+    <div class="container nav-wrap">
+      <a href="#" class="logo">MyPortfolio</a>
+      <ul class="nav-list" id="navList">
+        <li><a href="#hero">首页</a></li>
+        <li><a href="#about">关于我</a></li>
+        <li><a href="#skill">技能</a></li>
+        <li><a href="#project">项目</a></li>
+        <li><a href="#contact">联系</a></li>
+      </ul>
+      <div class="menu-btn" id="menuBtn">☰</div>
+    </div>
+  </header>
+
+  <!-- 首页横幅 -->
+  <section class="hero" id="hero">
+    <div class="container hero-content">
+      <h1>你好，我是前端开发者</h1>
+      <p>专注网页开发 | 极简设计 | 响应式页面制作</p>
+      <a href="#about" class="btn">了解更多</a>
+    </div>
+  </section>
+
+  <!-- 关于我 -->
+  <section id="about" class="bg-white">
+    <div class="container">
+      <h2 class="section-title">关于我</h2>
+      <div class="about-wrap">
+        <div class="avatar-box">
+          <!-- 替换src为你的头像图片 -->
+          <img class="avatar" src="https://picsum.photos/id/1005/300/300" alt="个人头像">
+        </div>
+        <div class="about-text">
+          <h3>热爱编程与设计的网页开发者</h3>
+          <p>拥有多年前端开发经验，熟练掌握HTML、CSS、JavaScript原生开发，擅长制作简约美观、适配全设备的单页网站、企业官网、个人作品集。</p>
+          <p>注重代码整洁与用户体验，擅长动画交互、响应式布局、静态页面优化，不依赖各类框架也能完成高质量页面开发。</p>
+          <p>平时喜欢研究网页设计趋势、交互效果，持续学习前端新技术，乐于打造干净舒适的视觉页面。</p>
+          <a href="#contact" class="btn" style="margin-top:20px;">联系我</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 技能展示 -->
+  <section id="skill">
+    <div class="container">
+      <h2 class="section-title">专业技能</h2>
+      <div class="skill-grid">
+        <div class="skill-card">
+          <h4>HTML5</h4>
+          <div class="skill-percent">
+            <span>页面语义化</span>
+            <span>95%</span>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-bar" data-width="95"></div>
+          </div>
+        </div>
+        <div class="skill-card">
+          <h4>CSS3 / Flex / Grid</h4>
+          <div class="skill-percent">
+            <span>布局与动画</span>
+            <span>90%</span>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-bar" data-width="90"></div>
+          </div>
+        </div>
+        <div class="skill-card">
+          <h4>原生JavaScript</h4>
+          <div class="skill-percent">
+            <span>交互逻辑</span>
+            <span>85%</span>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-bar" data-width="85"></div>
+          </div>
+        </div>
+        <div class="skill-card">
+          <h4>响应式开发</h4>
+          <div class="skill-percent">
+            <span>手机/PC适配</span>
+            <span>92%</span>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-bar" data-width="92"></div>
+          </div>
+        </div>
+        <div class="skill-card">
+          <h4>UI设计审美</h4>
+          <div class="skill-percent">
+            <span>简约页面设计</span>
+            <span>88%</span>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-bar" data-width="88"></div>
+          </div>
+        </div>
+        <div class="skill-card">
+          <h4>页面性能优化</h4>
+          <div class="skill-percent">
+            <span>加载速度优化</span>
+            <span>80%</span>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress-bar" data-width="80"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 项目作品 -->
+  <section id="project" class="bg-white">
+    <div class="container">
+      <h2 class="section-title">项目作品</h2>
+      <div class="project-grid">
+        <div class="project-card">
+          <div class="project-img">作品1</div>
+          <div class="project-info">
+            <h4>企业官网单页</h4>
+            <p>简约商务风格企业展示站，全端响应式，包含轮播、表单、导航动画。</p>
+            <span class="project-tag">HTML</span>
+            <span class="project-tag">CSS</span>
+            <span class="project-tag">JS</span>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-img">作品2</div>
+          <div class="project-info">
+            <h4>个人作品集网站</h4>
+            <p>同类型个人主页模板，技能动画、项目卡片、平滑滚动交互。</p>
+            <span class="project-tag">响应式</span>
+            <span class="project-tag">原生JS</span>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-img">作品3</div>
+          <div class="project-info">
+            <h4>在线活动落地页</h4>
+            <p>营销活动宣传页面，倒计时、弹窗、移动端适配优化。</p>
+            <span class="project-tag">交互动画</span>
+            <span class="project-tag">表单</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 联系方式 -->
+  <section id="contact">
+    <div class="container">
+      <h2 class="section-title">联系我</h2>
+      <div class="contact-wrap">
+        <div class="contact-info">
+          <div class="contact-item">
+            <div class="contact-icon">📧</div>
+            <div>
+              <h4>邮箱</h4>
+              <p>demo@example.com</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">📱</div>
+            <div>
+              <h4>电话</h4>
+              <p>138-0000-0000</p>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-icon">📍</div>
+            <div>
+              <h4>地址</h4>
+              <p>中国 · 郑州市</p>
+            </div>
+          </div>
+        </div>
+        <form class="contact-form" id="contactForm">
+          <input type="text" placeholder="你的姓名" required>
+          <input type="email" placeholder="你的邮箱" required>
+          <textarea placeholder="留言内容" required></textarea>
+          <button type="submit" class="btn" style="border:none;cursor:pointer;">发送留言</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer>
+    <div class="container">
+      <p>© 2026 MyPortfolio 个人主页 | All Rights Reserved</p>
+    </div>
+  </footer>
+
+  <!-- 原生JS逻辑 -->
+  <script>
+    // 1. 移动端菜单切换
+    const menuBtn = document.getElementById('menuBtn');
+    const navList = document.getElementById('navList');
+    menuBtn.addEventListener('click', () => {
+      navList.classList.toggle('active');
+      menuBtn.innerText = navList.classList.contains('active') ? '✕' : '☰';
+    });
+    // 点击导航链接关闭移动端菜单
+    const navLinks = navList.querySelectorAll('a');
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        navList.classList.remove('active');
+        menuBtn.innerText = '☰';
+      })
+    })
+
+    // 2. 滚动触发技能进度条动画
+    const progressBars = document.querySelectorAll('.progress-bar');
+    const skillSection = document.getElementById('skill');
+    let animated = false;
+    window.addEventListener('scroll', () => {
+      const rect = skillSection.getBoundingClientRect();
+      if (rect.top < window.innerHeight - 150 && !animated) {
+        progressBars.forEach(bar => {
+          const width = bar.getAttribute('data-width');
+          bar.style.width = width + '%';
+        })
+        animated = true;
+      }
+    })
+
+    // 3. 表单提交提示
+    const contactForm = document.getElementById('contactForm');
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('留言提交成功！我会尽快回复您');
+      contactForm.reset();
+    })
+
+    // 4. 导航栏滚动阴影增强
+    const header = document.querySelector('header');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        header.style.boxShadow = '0 4px 15px rgba(0,0,0,0.12)';
+      } else {
+        header.style.boxShadow = '0 2px 10px rgba(0,0,0,0.08)';
+      }
+    })
+  </script>
+</body>
+</html>
